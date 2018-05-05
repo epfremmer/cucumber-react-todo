@@ -1,0 +1,12 @@
+{
+  "include": [
+    "src/**/*.{ts,tsx}"
+  ],
+  "exclude": [
+    "src/**/*.spec.{ts,tsx}"
+  ],
+  "extension": [
+    ".ts",
+    ".tsx"
+  ]
+}
