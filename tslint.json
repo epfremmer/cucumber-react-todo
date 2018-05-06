@@ -4,6 +4,17 @@
       "tslint:recommended"
   ],
   "jsRules": {},
-  "rules": {},
+  "rules": {
+    "quotemark": [true, "single", "jsx-double"],
+    "ordered-imports": [true, { "import-sources-order": "any" }],
+    "arrow-parens": [true, "ban-single-arg-parens"],
+    "member-ordering": [true, { "order": [
+      "static-field",
+      "instance-field",
+      "constructor",
+      "static-method",
+      "instance-method"
+    ]}]
+  },
   "rulesDirectory": []
 }
