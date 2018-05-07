@@ -1,11 +1,17 @@
-import * as fs from 'fs';
+import * as TestUtils from 'react-dom/test-utils';
 import { ConstructorOptions, JSDOM } from 'jsdom';
 import { After, Before, setWorldConstructor } from 'cucumber';
-import { LocalStorage } from 'node-localstorage';
+import { render } from '@app/app';
 
-const PROJECT_ROOT = `${__dirname}/../..`;
-const TEMP_DIR = `${PROJECT_ROOT}/temp`;
-const INDEX_FILE = `${PROJECT_ROOT}/index.html`;
+const TEMPLATE = `
+  <div class="todoapp"></div>
+  <footer class="info">
+    <p>Double-click to edit a todo</p>
+    <p>Created by <a href="http://github.com/remojansen/">Remo H. Jansen</a></p>
+    <p>Part of <a href="http://todomvc.com">TodoMVC</a></p>
+  </footer>
+  <script type="text/javascript" src="node_modules/director/build/director.js"></script>
+`;
 
 const options: ConstructorOptions = {
   resources: 'usable',
@@ -21,14 +27,16 @@ class AppWorld {
   public currentElement: HTMLElement;
 
   constructor() {
-    this.dom = new JSDOM(fs.readFileSync(INDEX_FILE), options);
+    this.dom = new JSDOM(TEMPLATE, options);
     this.window = this.dom.window;
     this.document = this.window.document;
 
-    (this.window as any).localStorage = new LocalStorage(`${TEMP_DIR}/localstorage`);
-
     this.ready = new Promise(resolve => {
-      this.document.addEventListener('DOMContentLoaded', () => resolve(true));
+      this.document.addEventListener('DOMContentLoaded', () => {
+        (global as any).Router = (this.window as any).Router;
+        render(this.document);
+        resolve(true);
+      });
     });
   }
 
@@ -45,22 +53,17 @@ class AppWorld {
   }
 
   public pressEnter() {
-    const React = (this.window as any).React;
     const event = { keyCode: 13 };
 
-    React.addons.TestUtils.Simulate.keyDown(this.currentElement, event);
+    TestUtils.Simulate.keyDown(this.currentElement, event);
   }
 
   public toggleCheckbox() {
-    const React = (this.window as any).React;
-
-    React.addons.TestUtils.Simulate.change(this.currentElement);
+    TestUtils.Simulate.change(this.currentElement);
   }
 
   public click() {
-    const React = (this.window as any).React;
-
-    React.addons.TestUtils.Simulate.click(this.currentElement);
+    TestUtils.Simulate.click(this.currentElement);
   }
 
   public html() {
@@ -75,7 +78,7 @@ Before(function() {
 });
 
 After(function() {
-  this.window.localStorage.clear();
+  localStorage.clear();
 });
 
 setWorldConstructor(AppWorld);

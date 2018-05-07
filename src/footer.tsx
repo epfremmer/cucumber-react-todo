@@ -7,6 +7,9 @@
 /// <reference path="../typings/tsd.d.ts" />
 /// <reference path="./interfaces.d.ts"/>
 
+import * as React from 'react';
+import * as classNames from 'classnames';
+
 import { ALL_TODOS, ACTIVE_TODOS, COMPLETED_TODOS } from "./constants";
 import { Utils } from "./utils";
 
@@ -40,7 +43,7 @@ class TodoFooter extends React.Component<ITodoFooterProps, {}> {
                 All
             </a>
           </li>
-          {' '}
+          <span>{' '}</span>
           <li>
             <a
               href="#/active"
@@ -48,7 +51,7 @@ class TodoFooter extends React.Component<ITodoFooterProps, {}> {
                 Active
             </a>
           </li>
-          {' '}
+          <span>{' '}</span>
           <li>
             <a
               href="#/completed"

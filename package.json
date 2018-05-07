@@ -7,12 +7,13 @@
   "private": true,
   "main": "index.js",
   "scripts": {
-    "test": "node $NODE_DEBUG_OPTION `which cucumber-js` test/features -r test/support/**/*.ts --require-module ts-node/register --require-module tsconfig-paths/register"
+    "test": "node $NODE_DEBUG_OPTION `which cucumber-js` test/features -r test/bootstrap.ts -r test/support/**/*.ts --require-module ts-node/register --require-module tsconfig-paths/register"
   },
   "dependencies": {
     "classnames": "^2.1.5",
     "director": "^1.2.0",
-    "react": "^0.13.3",
+    "raf": "^3.4.0",
+    "react": "^16.3.2",
     "react-dom": "^16.3.2",
     "todomvc-app-css": "^2.0.0",
     "todomvc-common": "^1.0.1"
