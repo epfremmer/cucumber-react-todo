@@ -8,5 +8,15 @@
   "extension": [
     ".ts",
     ".tsx"
-  ]
+  ],
+  "require": [
+    "ts-node/register",
+    "tsconfig-paths/register"
+  ],
+  "reporter": [
+    "text",
+    "html"
+  ],
+  "sourceMap": true,
+  "instrument": true
 }
