@@ -1,5 +1,5 @@
 import * as TestUtils from 'react-dom/test-utils';
-import { ConstructorOptions, JSDOM } from 'jsdom';
+import { JSDOM } from 'jsdom';
 import { After, Before, setWorldConstructor } from 'cucumber';
 import { createHashHistory, History } from "history";
 import { render } from '@app/app';
@@ -13,11 +13,6 @@ const TEMPLATE = `
   </footer>
 `;
 
-const options: ConstructorOptions = {
-  resources: 'usable',
-  runScripts: 'dangerously',
-};
-
 class AppWorld {
   private dom: JSDOM;
   private window: Window;
@@ -28,7 +23,7 @@ class AppWorld {
   public currentElement: HTMLElement;
 
   constructor() {
-    this.dom = new JSDOM(TEMPLATE, options);
+    this.dom = new JSDOM(TEMPLATE);
     this.window = this.dom.window;
     this.document = this.window.document;
     this.history = createHashHistory();
