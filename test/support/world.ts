@@ -1,6 +1,7 @@
 import * as TestUtils from 'react-dom/test-utils';
 import { ConstructorOptions, JSDOM } from 'jsdom';
 import { After, Before, setWorldConstructor } from 'cucumber';
+import { createHashHistory, History } from "history";
 import { render } from '@app/app';
 
 const TEMPLATE = `
@@ -22,6 +23,7 @@ class AppWorld {
   private dom: JSDOM;
   private window: Window;
   private document: Document;
+  private history: History;
   private ready: Promise<boolean>;
 
   public currentElement: HTMLElement;
@@ -30,6 +32,7 @@ class AppWorld {
     this.dom = new JSDOM(TEMPLATE, options);
     this.window = this.dom.window;
     this.document = this.window.document;
+    this.history = createHashHistory();
 
     this.ready = new Promise(resolve => {
       this.document.addEventListener('DOMContentLoaded', () => {

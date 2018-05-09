@@ -1,15 +1,15 @@
 /// <reference path="./interfaces.d.ts"/>
 
-declare var Router;
-
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
+import { Route, Switch } from "react-router";
+import { HashRouter } from 'react-router-dom'
 import { KeyboardEvent, FormEvent } from 'react';
 
 import { TodoModel } from "./todoModel";
 import { TodoFooter } from "./footer";
 import { TodoItem } from "./todoItem";
-import { ALL_TODOS, ACTIVE_TODOS, COMPLETED_TODOS, ENTER_KEY } from "./constants";
+import { ENTER_KEY } from "./constants";
 
 class TodoApp extends React.Component<IAppProps, IAppState> {
 
@@ -18,19 +18,8 @@ class TodoApp extends React.Component<IAppProps, IAppState> {
   constructor(props : IAppProps) {
     super(props);
     this.state = {
-      nowShowing: ALL_TODOS,
       editing: null
     };
-  }
-
-  public componentDidMount() {
-    const setState = this.setState;
-    const router = Router({
-      '/': setState.bind(this, {nowShowing: ALL_TODOS}),
-      '/active': setState.bind(this, {nowShowing: ACTIVE_TODOS}),
-      '/completed': setState.bind(this, {nowShowing: COMPLETED_TODOS})
-    });
-    router.init('/');
   }
 
   public handleNewTodoKeyDown(event : KeyboardEvent<HTMLInputElement>) {
@@ -79,35 +68,24 @@ class TodoApp extends React.Component<IAppProps, IAppState> {
     this.props.model.clearCompleted();
   }
 
+  private renderTodos(todos: ITodo[]) {
+    return todos.map((todo) => (
+      <TodoItem
+        key={todo.id}
+        todo={todo}
+        onToggle={this.toggle.bind(this, todo)}
+        onDestroy={this.destroy.bind(this, todo)}
+        onEdit={this.edit.bind(this, todo)}
+        editing={this.state.editing === todo.id}
+        onSave={this.save.bind(this, todo)}
+        onCancel={ e => this.cancel() }
+      />
+    ));
+  }
+
   public render() {
-    const todos = this.props.model.todos;
+    const { todos } = this.props.model;
     let footer, main;
-
-    const shownTodos = todos.filter((todo) => {
-      switch (this.state.nowShowing) {
-      case ACTIVE_TODOS:
-        return !todo.completed;
-      case COMPLETED_TODOS:
-        return todo.completed;
-      default:
-        return true;
-      }
-    });
-
-    const todoItems = shownTodos.map((todo) => {
-      return (
-        <TodoItem
-          key={todo.id}
-          todo={todo}
-          onToggle={this.toggle.bind(this, todo)}
-          onDestroy={this.destroy.bind(this, todo)}
-          onEdit={this.edit.bind(this, todo)}
-          editing={this.state.editing === todo.id}
-          onSave={this.save.bind(this, todo)}
-          onCancel={ e => this.cancel() }
-        />
-      );
-    });
 
     // Note: It's usually better to use immutable data structures since they're
     // easier to reason about and React works very well with them. That's why
@@ -124,7 +102,6 @@ class TodoApp extends React.Component<IAppProps, IAppState> {
         <TodoFooter
           count={activeTodoCount}
           completedCount={completedCount}
-          nowShowing={this.state.nowShowing}
           onClearCompleted={ e=> this.clearCompleted() }
         />;
     }
@@ -139,13 +116,15 @@ class TodoApp extends React.Component<IAppProps, IAppState> {
             onChange={ e => this.toggleAll(e) }
             checked={activeTodoCount === 0}
           />
-          <label
-            htmlFor="toggle-all"
-          >
+          <label htmlFor="toggle-all">
             Mark all as complete
           </label>
           <ul className="todo-list">
-            {todoItems}
+            <Switch>
+              <Route exact path="/" render={() => this.renderTodos(todos)} />
+              <Route path="/active" render={() => this.renderTodos(todos.filter(todo => !todo.completed))} />
+              <Route path="/completed" render={() => this.renderTodos(todos.filter(todo => todo.completed))} />
+            </Switch>
           </ul>
         </section>
       );
@@ -174,8 +153,11 @@ export function render(document?) {
   const model = new TodoModel('react-todos');
   model.subscribe(() => render(document));
 
-  ReactDOM.render(
-    <TodoApp model={model}/>,
+  ReactDOM.render((
+      <HashRouter>
+        <TodoApp model={model}/>
+      </HashRouter>
+    ),
     document.getElementsByClassName('todoapp')[0]
   );
 }

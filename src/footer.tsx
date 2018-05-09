@@ -2,6 +2,7 @@
 
 import * as React from 'react';
 import * as classNames from 'classnames';
+import { Link } from "react-router-dom";
 
 import { ALL_TODOS, ACTIVE_TODOS, COMPLETED_TODOS } from "./constants";
 import { Utils } from "./utils";
@@ -9,6 +10,8 @@ import { Utils } from "./utils";
 class TodoFooter extends React.Component<ITodoFooterProps, {}> {
 
   public render() {
+    // @todo: change this out with redux location data
+    const nowShowing = window.location.hash.replace('#/', '');
     const activeTodoWord = Utils.pluralize(this.props.count, 'item');
     let clearButton = null;
 
@@ -22,7 +25,6 @@ class TodoFooter extends React.Component<ITodoFooterProps, {}> {
       );
     }
 
-    const nowShowing = this.props.nowShowing;
     return (
       <footer className="footer">
         <span className="todo-count">
@@ -30,27 +32,15 @@ class TodoFooter extends React.Component<ITodoFooterProps, {}> {
         </span>
         <ul className="filters">
           <li>
-            <a
-              href="#/"
-              className={classNames({selected: nowShowing === ALL_TODOS})}>
-                All
-            </a>
+            <Link to="/" className={classNames({selected: nowShowing === ALL_TODOS})}>All</Link>
           </li>
           <span>{' '}</span>
           <li>
-            <a
-              href="#/active"
-              className={classNames({selected: nowShowing === ACTIVE_TODOS})}>
-                Active
-            </a>
+            <Link to="/active" className={classNames({selected: nowShowing === ACTIVE_TODOS})}>Active</Link>
           </li>
           <span>{' '}</span>
           <li>
-            <a
-              href="#/completed"
-              className={classNames({selected: nowShowing === COMPLETED_TODOS})}>
-                Completed
-            </a>
+            <Link to="/completed" className={classNames({selected: nowShowing === COMPLETED_TODOS})}>Completed</Link>
           </li>
         </ul>
         {clearButton}

@@ -41,9 +41,9 @@ When('I click the {string} element', function(selector) {
 
 When('I click the {string} link', function(selector) {
   const link = this.find(selector);
-  const event = new this.window.HashChangeEvent('hashchange', { newURL: link.href });
+  this.history.push(link.hash.replace('#', ''));
 
-  this.window.dispatchEvent(event);
+  return new Promise(resolve => setTimeout(resolve));
 });
 
 Then('print that element\'s HTML', function() {
