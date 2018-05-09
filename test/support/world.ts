@@ -11,7 +11,6 @@ const TEMPLATE = `
     <p>Created by <a href="http://github.com/remojansen/">Remo H. Jansen</a></p>
     <p>Part of <a href="http://todomvc.com">TodoMVC</a></p>
   </footer>
-  <script type="text/javascript" src="node_modules/director/build/director.js"></script>
 `;
 
 const options: ConstructorOptions = {
@@ -35,11 +34,8 @@ class AppWorld {
     this.history = createHashHistory();
 
     this.ready = new Promise(resolve => {
-      this.document.addEventListener('DOMContentLoaded', () => {
-        (global as any).Router = (this.window as any).Router;
-        render(this.document);
-        resolve(true);
-      });
+      render(this.document);
+      resolve(true);
     });
   }
 
