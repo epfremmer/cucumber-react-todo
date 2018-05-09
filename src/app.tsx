@@ -30,8 +30,8 @@ class TodoApp extends React.Component<IAppProps, IAppState> {
   }
 
   public componentDidMount() {
-    var setState = this.setState;
-    var router = Router({
+    const setState = this.setState;
+    const router = Router({
       '/': setState.bind(this, {nowShowing: ALL_TODOS}),
       '/active': setState.bind(this, {nowShowing: ACTIVE_TODOS}),
       '/completed': setState.bind(this, {nowShowing: COMPLETED_TODOS})
@@ -46,7 +46,7 @@ class TodoApp extends React.Component<IAppProps, IAppState> {
 
     event.preventDefault();
 
-    var val = (ReactDOM.findDOMNode(this.refs["newField"]) as HTMLInputElement).value.trim();
+    const val = (ReactDOM.findDOMNode(this.refs["newField"]) as HTMLInputElement).value.trim();
 
     if (val) {
       this.props.model.addTodo(val);
@@ -55,8 +55,8 @@ class TodoApp extends React.Component<IAppProps, IAppState> {
   }
 
   public toggleAll(event : __React.FormEvent) {
-    var target : any = event.target;
-    var checked = target.checked;
+    const target : any = event.target;
+    const checked = target.checked;
     this.props.model.toggleAll(checked);
   }
 
@@ -86,11 +86,10 @@ class TodoApp extends React.Component<IAppProps, IAppState> {
   }
 
   public render() {
-    var footer;
-    var main;
     const todos = this.props.model.todos;
+    let footer, main;
 
-    var shownTodos = todos.filter((todo) => {
+    const shownTodos = todos.filter((todo) => {
       switch (this.state.nowShowing) {
       case ACTIVE_TODOS:
         return !todo.completed;
@@ -101,7 +100,7 @@ class TodoApp extends React.Component<IAppProps, IAppState> {
       }
     });
 
-    var todoItems = shownTodos.map((todo) => {
+    const todoItems = shownTodos.map((todo) => {
       return (
         <TodoItem
           key={todo.id}
@@ -120,11 +119,11 @@ class TodoApp extends React.Component<IAppProps, IAppState> {
     // easier to reason about and React works very well with them. That's why
     // we use map(), filter() and reduce() everywhere instead of mutating the
     // array or todo items themselves.
-    var activeTodoCount = todos.reduce(function (accum, todo) {
+    const activeTodoCount = todos.reduce(function (accum, todo) {
       return todo.completed ? accum : accum + 1;
     }, 0);
 
-    var completedCount = todos.length - activeTodoCount;
+    const completedCount = todos.length - activeTodoCount;
 
     if (activeTodoCount || completedCount) {
       footer =
@@ -178,7 +177,7 @@ class TodoApp extends React.Component<IAppProps, IAppState> {
 }
 
 export function render(document?) {
-  var model = new TodoModel('react-todos');
+  const model = new TodoModel('react-todos');
   model.subscribe(() => render(document));
 
   ReactDOM.render(

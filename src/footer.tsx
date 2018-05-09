@@ -16,8 +16,8 @@ import { Utils } from "./utils";
 class TodoFooter extends React.Component<ITodoFooterProps, {}> {
 
   public render() {
-    var activeTodoWord = Utils.pluralize(this.props.count, 'item');
-    var clearButton = null;
+    const activeTodoWord = Utils.pluralize(this.props.count, 'item');
+    let clearButton = null;
 
     if (this.props.completedCount > 0) {
       clearButton = (
