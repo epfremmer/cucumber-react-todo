@@ -1,16 +1,10 @@
-/*jshint quotmark:false */
-/*jshint white:false */
-/*jshint trailing:false */
-/*jshint newcap:false */
-/*global React, Router*/
-
-/// <reference path="../typings/tsd.d.ts" />
 /// <reference path="./interfaces.d.ts"/>
 
 declare var Router;
 
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
+import { KeyboardEvent, FormEvent } from 'react';
 
 import { TodoModel } from "./todoModel";
 import { TodoFooter } from "./footer";
@@ -39,7 +33,7 @@ class TodoApp extends React.Component<IAppProps, IAppState> {
     router.init('/');
   }
 
-  public handleNewTodoKeyDown(event : __React.KeyboardEvent) {
+  public handleNewTodoKeyDown(event : KeyboardEvent<HTMLInputElement>) {
     if (event.keyCode !== ENTER_KEY) {
       return;
     }
@@ -54,7 +48,7 @@ class TodoApp extends React.Component<IAppProps, IAppState> {
     }
   }
 
-  public toggleAll(event : __React.FormEvent) {
+  public toggleAll(event : FormEvent<HTMLInputElement>) {
     const target : any = event.target;
     const checked = target.checked;
     this.props.model.toggleAll(checked);

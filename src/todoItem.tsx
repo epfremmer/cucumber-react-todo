@@ -1,14 +1,9 @@
-/*jshint quotmark: false */
-/*jshint white: false */
-/*jshint trailing: false */
-/*jshint newcap: false */
-/*global React */
-
-/// <reference path="../typings/tsd.d.ts" />
 /// <reference path="./interfaces.d.ts"/>
 
 import * as React from 'react';
+import * as ReactDOM from 'react-dom';
 import * as classNames from 'classnames';
+import { FormEvent, KeyboardEvent } from "react";
 
 import { ENTER_KEY, ESCAPE_KEY } from "./constants";
 
@@ -21,7 +16,7 @@ class TodoItem extends React.Component<ITodoItemProps, ITodoItemState> {
     this.state = { editText: this.props.todo.title };
   }
 
-  public handleSubmit(event : __React.FormEvent) {
+  public handleSubmit(event : FormEvent<HTMLInputElement>) {
     const val = this.state.editText.trim();
     if (val) {
       this.props.onSave(val);
@@ -36,16 +31,16 @@ class TodoItem extends React.Component<ITodoItemProps, ITodoItemState> {
     this.setState({editText: this.props.todo.title});
   }
 
-  public handleKeyDown(event : __React.KeyboardEvent) {
+  public handleKeyDown(event : KeyboardEvent<HTMLInputElement>) {
     if (event.keyCode === ESCAPE_KEY) {
       this.setState({editText: this.props.todo.title});
       this.props.onCancel(event);
     } else if (event.keyCode === ENTER_KEY) {
-      this.handleSubmit(event);
+      this.handleSubmit(event as any);
     }
   }
 
-  public handleChange(event : __React.FormEvent) {
+  public handleChange(event : FormEvent<HTMLInputElement>) {
     const input : any = event.target;
     this.setState({ editText : input.value });
   }
@@ -73,7 +68,7 @@ class TodoItem extends React.Component<ITodoItemProps, ITodoItemState> {
    */
   public componentDidUpdate(prevProps : ITodoItemProps) {
     if (!prevProps.editing && this.props.editing) {
-      const node = React.findDOMNode<HTMLInputElement>(this.refs["editField"]);
+      const node = ReactDOM.findDOMNode(this.refs["editField"]) as HTMLInputElement;
       node.focus();
       node.setSelectionRange(node.value.length, node.value.length);
     }
