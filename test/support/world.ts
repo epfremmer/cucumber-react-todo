@@ -1,7 +1,7 @@
 import * as TestUtils from 'react-dom/test-utils';
-import { JSDOM } from 'jsdom';
-import { After, Before, setWorldConstructor } from 'cucumber';
+import { After, setWorldConstructor } from 'cucumber';
 import { createHashHistory, History } from "history";
+import { JSDOM } from 'jsdom';
 import { render } from '@app/app';
 
 const TEMPLATE = `
@@ -18,7 +18,6 @@ class AppWorld {
   private window: Window;
   private document: Document;
   private history: History;
-  private ready: Promise<boolean>;
 
   public currentElement: HTMLElement;
 
@@ -28,10 +27,7 @@ class AppWorld {
     this.document = this.window.document;
     this.history = createHashHistory();
 
-    this.ready = new Promise(resolve => {
-      render(this.document);
-      resolve(true);
-    });
+    render(this.document);
   }
 
   public find(selector) {
@@ -66,10 +62,6 @@ class AppWorld {
     process.stdout.write('\n=============== debug end =================\n');
   }
 }
-
-Before(function() {
-  return this.ready;
-});
 
 After(function() {
   localStorage.clear();
