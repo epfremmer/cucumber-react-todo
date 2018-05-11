@@ -20,21 +20,6 @@ interface ITodoFooterProps {
   count : number;
 }
 
-
-interface ITodoModel {
-  key : any;
-  todos : Array<ITodo>;
-  onChanges : Array<any>;
-  subscribe(onChange);
-  inform();
-  addTodo(title : string);
-  toggleAll(checked);
-  toggle(todoToToggle);
-  destroy(todo);
-  save(todoToSave, text);
-  clearCompleted();
-}
-
 interface IAppProps {
   // model : ITodoModel;
 }
