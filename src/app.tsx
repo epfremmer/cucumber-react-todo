@@ -5,23 +5,28 @@ import * as ReactDOM from 'react-dom';
 import { Route, Switch } from "react-router";
 import { HashRouter } from 'react-router-dom'
 import { KeyboardEvent, FormEvent } from 'react';
+import { connect, Provider } from "react-redux";
 
-import { TodoModel } from "./todoModel";
-import { TodoFooter } from "./footer";
-import { TodoItem } from "./todoItem";
-import { ENTER_KEY } from "./constants";
+import { TodoFooter } from "@app/footer";
+import { TodoItem } from "@app/todoItem";
+import { ENTER_KEY } from "@app/constants";
+import { store } from "@app/store";
+import { addTodo, clearCompleted, deleteTodo, toggleAll, toggleTodo, updateTodo } from "@app/actions";
+import { Utils } from "@app/utils";
 
-class TodoApp extends React.Component<IAppProps, IAppState> {
+interface ConnectedStateProps {
+  todos: ITodo[];
+}
 
-  public state : IAppState;
+interface ConnectedDispatchProps {
+  addTodo: typeof addTodo;
+  toggleAll: typeof toggleAll;
+  clearCompleted: typeof clearCompleted;
+}
 
-  constructor(props : IAppProps) {
-    super(props);
-    this.state = {
-      editing: null
-    };
-  }
+type TodoAppComponentProps = IAppProps & ConnectedStateProps & ConnectedDispatchProps;
 
+class TodoAppComponent extends React.Component<TodoAppComponentProps, IAppState> {
   public handleNewTodoKeyDown(event : KeyboardEvent<HTMLInputElement>) {
     if (event.keyCode !== ENTER_KEY) {
       return;
@@ -32,40 +37,20 @@ class TodoApp extends React.Component<IAppProps, IAppState> {
     const val = (ReactDOM.findDOMNode(this.refs["newField"]) as HTMLInputElement).value.trim();
 
     if (val) {
-      this.props.model.addTodo(val);
+      const todo = { id: Utils.uuid(), title: val, completed: false };
+      this.props.addTodo(todo);
       (ReactDOM.findDOMNode(this.refs["newField"]) as HTMLInputElement).value = '';
     }
   }
 
   public toggleAll(event : FormEvent<HTMLInputElement>) {
-    const target : any = event.target;
+    const target: any = event.target;
     const checked = target.checked;
-    this.props.model.toggleAll(checked);
-  }
-
-  public toggle(todoToToggle : ITodo) {
-    this.props.model.toggle(todoToToggle);
-  }
-
-  public destroy(todo : ITodo) {
-    this.props.model.destroy(todo);
-  }
-
-  public edit(todo : ITodo) {
-    this.setState({editing: todo.id});
-  }
-
-  public save(todoToSave : ITodo, text : String) {
-    this.props.model.save(todoToSave, text);
-    this.setState({editing: null});
-  }
-
-  public cancel() {
-    this.setState({editing: null});
+    this.props.toggleAll(checked);
   }
 
   public clearCompleted() {
-    this.props.model.clearCompleted();
+    this.props.clearCompleted();
   }
 
   private renderTodos(todos: ITodo[]) {
@@ -73,18 +58,12 @@ class TodoApp extends React.Component<IAppProps, IAppState> {
       <TodoItem
         key={todo.id}
         todo={todo}
-        onToggle={this.toggle.bind(this, todo)}
-        onDestroy={this.destroy.bind(this, todo)}
-        onEdit={this.edit.bind(this, todo)}
-        editing={this.state.editing === todo.id}
-        onSave={this.save.bind(this, todo)}
-        onCancel={ e => this.cancel() }
       />
     ));
   }
 
   public render() {
-    const { todos } = this.props.model;
+    const { todos } = this.props;
     let footer, main;
 
     // Note: It's usually better to use immutable data structures since they're
@@ -149,14 +128,25 @@ class TodoApp extends React.Component<IAppProps, IAppState> {
   }
 }
 
-export function render(document?) {
-  const model = new TodoModel('react-todos');
-  model.subscribe(() => render(document));
+const mapStateToProps = ({ todos }) => ({ todos });
+const mapDispatchToProps = {
+  addTodo,
+  updateTodo,
+  deleteTodo,
+  toggleTodo,
+  toggleAll,
+  clearCompleted,
+};
 
+const TodoApp = connect(mapStateToProps, mapDispatchToProps)(TodoAppComponent);
+
+export function render(document?) {
   ReactDOM.render((
-      <HashRouter>
-        <TodoApp model={model}/>
-      </HashRouter>
+      <Provider store={store}>
+        <HashRouter>
+          <TodoApp />
+        </HashRouter>
+      </Provider>
     ),
     document.getElementsByClassName('todoapp')[0]
   );

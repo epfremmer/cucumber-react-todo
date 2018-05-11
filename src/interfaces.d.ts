@@ -5,18 +5,13 @@ interface ITodo {
 }
 
 interface ITodoItemProps {
-  key : string,
-  todo : ITodo;
-  editing? : boolean;
-  onSave: (val: any) => void;
-  onDestroy: () => void;
-  onEdit: ()  => void;
-  onCancel: (event : any) => void;
-  onToggle: () => void;
+  key: string,
+  todo: ITodo;
 }
 
 interface ITodoItemState {
-  editText : string
+  editText: string
+  editing: boolean;
 }
 
 interface ITodoFooterProps {
@@ -41,9 +36,9 @@ interface ITodoModel {
 }
 
 interface IAppProps {
-  model : ITodoModel;
+  // model : ITodoModel;
 }
 
 interface IAppState {
-  editing? : string;
+  // editing? : string;
 }
