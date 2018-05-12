@@ -10,6 +10,10 @@ import { TodoFooter } from "@app/footer";
 import { TodoList } from "@app/todoList";
 import { addTodo, deleteTodo, toggleAll, toggleTodo, updateTodo } from "@app/actions";
 
+interface TodoAppState {
+  newTodoTitle: string;
+}
+
 interface ConnectedStateProps {
   todos: Todo[];
   activeTodos: Todo[];
@@ -21,13 +25,9 @@ interface ConnectedDispatchProps {
   toggleAll: typeof toggleAll;
 }
 
-interface State {
-  newTodoTitle: string;
-}
-
 type TodoAppComponentProps = ConnectedStateProps & ConnectedDispatchProps;
 
-class TodoAppComponent extends React.Component<TodoAppComponentProps, State> {
+class TodoAppComponent extends React.Component<TodoAppComponentProps, TodoAppState> {
   public state = {
     newTodoTitle: ''
   };

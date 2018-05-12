@@ -9,6 +9,16 @@ import { connect } from "react-redux";
 import { ENTER_KEY, ESCAPE_KEY } from "@app/constants";
 import { deleteTodo, toggleTodo, updateTodo } from "@app/actions";
 
+interface TodoItemProps {
+  key: string,
+  todo: Todo;
+}
+
+interface TodoItemState {
+  editText: string
+  editing: boolean;
+}
+
 interface ConnectedStateProps { }
 interface ConnectedDispatchProps {
   updateTodo: typeof updateTodo;
@@ -16,9 +26,9 @@ interface ConnectedDispatchProps {
   toggleTodo: typeof toggleTodo;
 }
 
-type TodoItemComonentProps = ITodoItemProps & ConnectedStateProps & ConnectedDispatchProps;
+type TodoItemComonentProps = TodoItemProps & ConnectedStateProps & ConnectedDispatchProps;
 
-class TodoItemComonent extends React.Component<TodoItemComonentProps, ITodoItemState> {
+class TodoItemComonent extends React.Component<TodoItemComonentProps, TodoItemState> {
   public state = {
     editText: this.props.todo.title,
     editing: false,
@@ -31,7 +41,7 @@ class TodoItemComonent extends React.Component<TodoItemComonentProps, ITodoItemS
    * just use it as an example of how little code it takes to get an order
    * of magnitude performance improvement.
    */
-  public shouldComponentUpdate(nextProps: ITodoItemProps, nextState: ITodoItemState) {
+  public shouldComponentUpdate(nextProps: TodoItemComonentProps, nextState: TodoItemState) {
     return (
       nextProps.todo !== this.props.todo ||
       nextState.editing !== this.state.editing ||
@@ -45,7 +55,7 @@ class TodoItemComonent extends React.Component<TodoItemComonentProps, ITodoItemS
    * For more info refer to notes at https://facebook.github.io/react/docs/component-api.html#setstate
    * and https://facebook.github.io/react/docs/component-specs.html#updating-componentdidupdate
    */
-  public componentDidUpdate(prevProps: ITodoItemProps, prevState: ITodoItemState) {
+  public componentDidUpdate(prevProps: TodoItemComonentProps, prevState: TodoItemState) {
     if (!prevState.editing && this.state.editing) {
       const node = ReactDOM.findDOMNode(this.refs["editField"]) as HTMLInputElement;
       node.focus();
