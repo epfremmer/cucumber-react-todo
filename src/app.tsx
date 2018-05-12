@@ -3,14 +3,12 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { Route, Switch } from "react-router";
-import { HashRouter } from 'react-router-dom'
 import { KeyboardEvent, FormEvent } from 'react';
-import { connect, Provider } from "react-redux";
+import { connect } from "react-redux";
 
 import { TodoFooter } from "@app/footer";
 import { TodoItem } from "@app/todoItem";
 import { ENTER_KEY } from "@app/constants";
-import { store } from "@app/store";
 import { addTodo, clearCompleted, deleteTodo, toggleAll, toggleTodo, updateTodo } from "@app/actions";
 import { Utils } from "@app/utils";
 
@@ -138,16 +136,4 @@ const mapDispatchToProps = {
   clearCompleted,
 };
 
-const TodoApp = connect(mapStateToProps, mapDispatchToProps)(TodoAppComponent);
-
-export function render(document?) {
-  ReactDOM.render((
-      <Provider store={store}>
-        <HashRouter>
-          <TodoApp />
-        </HashRouter>
-      </Provider>
-    ),
-    document.getElementsByClassName('todoapp')[0]
-  );
-}
+export const TodoApp = connect(mapStateToProps, mapDispatchToProps)(TodoAppComponent);

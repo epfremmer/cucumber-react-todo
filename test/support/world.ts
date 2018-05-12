@@ -1,8 +1,7 @@
 import * as TestUtils from 'react-dom/test-utils';
 import { After, setWorldConstructor } from 'cucumber';
-import { createHashHistory, History } from "history";
 import { JSDOM } from 'jsdom';
-import { render } from '@app/app';
+import { render } from '../entrypoint';
 
 const TEMPLATE = `
   <div class="todoapp"></div>
@@ -17,7 +16,6 @@ class AppWorld {
   private dom: JSDOM;
   private window: Window;
   private document: Document;
-  private history: History;
 
   public currentElement: HTMLElement;
 
@@ -25,9 +23,8 @@ class AppWorld {
     this.dom = new JSDOM(TEMPLATE);
     this.window = this.dom.window;
     this.document = this.window.document;
-    this.history = createHashHistory();
 
-    render(this.document);
+    render(this.window);
   }
 
   public find(selector) {

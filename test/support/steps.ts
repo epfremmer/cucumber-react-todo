@@ -41,9 +41,12 @@ When('I click the {string} element', function(selector) {
 
 When('I click the {string} link', function(selector) {
   const link = this.find(selector);
-  this.history.push(link.hash.replace('#', ''));
+  const app = this.window.app;
 
-  return new Promise(resolve => setTimeout(resolve));
+  assert(link instanceof this.window.HTMLAnchorElement);
+  link.click();
+
+  return new Promise(resolve => app.forceUpdate(resolve));
 });
 
 Then('print that element\'s HTML', function() {
