@@ -22,3 +22,11 @@ const { window } = new JSDOM('');
  * reactDOM from throwing warnings
  */
 raf.polyfill(global);
+
+/**
+ * Polyfill Element.closes because JSDOM has not added it to their spec yet
+ *
+ * @see https://github.com/jsdom/jsdom/pull/1951
+ * @see https://developer.mozilla.org/en-US/docs/Web/API/Element/closest
+ */
+require('element-closest');
