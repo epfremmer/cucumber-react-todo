@@ -1,12 +1,9 @@
 import { AnyAction, combineReducers } from 'redux';
 import * as Actions from "@app/actions";
 import todoProvider from '@app/todoProvider';
-import { ALL_TODOS } from "@app/constants";
 
 const todos = (state: ITodo[] = [], action: AnyAction) => {
   switch (action.type) {
-    case Actions.FETCH_TODOS:
-      return todoProvider.fetchTodos();
     case Actions.ADD_TODO:
       todoProvider.saveTodo(action.todo);
       return todoProvider.fetchTodos();
@@ -30,16 +27,4 @@ const todos = (state: ITodo[] = [], action: AnyAction) => {
   }
 };
 
-const filter = (state = ALL_TODOS, action: AnyAction) => {
-  switch (action.type) {
-    case Actions.SET_TODO_FILTER:
-      return action.filter;
-    default:
-      return state;
-  }
-};
-
-export const reducers = combineReducers({
-  todos,
-  filter
-});
+export const reducers = combineReducers({ todos });
