@@ -4,31 +4,36 @@ import * as React from 'react';
 import * as classNames from 'classnames';
 import * as pluralize from 'pluralize';
 import { Link } from "react-router-dom";
+import { connect } from "react-redux";
 
 import { ALL_TODOS, ACTIVE_TODOS, COMPLETED_TODOS } from "./constants";
+import { clearCompleted } from "@app/actions";
 
-class TodoFooter extends React.Component<ITodoFooterProps, {}> {
+interface ConnectedStateProps {
+  activeCount: number;
+  completedCount: number;
+}
+
+interface ConnectedDispatchProps {
+  clearCompleted: typeof clearCompleted;
+}
+
+type TodoFooterComponentProps = ConnectedStateProps & ConnectedDispatchProps;
+
+class TodoFooterComponent extends React.Component<TodoFooterComponentProps> {
+
+  private clearCompleted = () => this.props.clearCompleted();
 
   public render() {
+    const { activeCount, completedCount } = this.props;
     // @todo: change this out with redux location data
     const nowShowing = window.location.hash.replace('#/', '');
-    const activeTodoWord = pluralize('item', this.props.count);
-    let clearButton = null;
-
-    if (this.props.completedCount > 0) {
-      clearButton = (
-        <button
-          className="clear-completed"
-          onClick={this.props.onClearCompleted}>
-          Clear completed
-        </button>
-      );
-    }
 
     return (
       <footer className="footer">
         <span className="todo-count">
-          <strong>{this.props.count}</strong> {activeTodoWord} left
+          <strong>{activeCount}</strong>
+          <span> {pluralize('item', activeCount)} left</span>
         </span>
         <ul className="filters">
           <li>
@@ -43,10 +48,23 @@ class TodoFooter extends React.Component<ITodoFooterProps, {}> {
             <Link to="/completed" className={classNames({selected: nowShowing === COMPLETED_TODOS})}>Completed</Link>
           </li>
         </ul>
-        {clearButton}
+        {completedCount > 0 &&
+          <button className="clear-completed" onClick={this.clearCompleted}>
+            Clear completed
+          </button>
+        }
       </footer>
     );
   }
 }
 
-export { TodoFooter };
+const mapStateToProps = ({ todos }) => ({
+  activeCount: todos.filter(todo => !todo.completed).length,
+  completedCount: todos.filter(todo => todo.completed).length
+});
+
+const mapDispatchToProps = {
+  clearCompleted
+};
+
+export const TodoFooter = connect(mapStateToProps, mapDispatchToProps)(TodoFooterComponent);

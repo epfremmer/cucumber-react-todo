@@ -24,49 +24,6 @@ class TodoItemComonent extends React.Component<TodoItemComonentProps, ITodoItemS
     editing: false,
   };
 
-  public cancel() {
-    this.setState({ editing: false, editText: this.props.todo.title });
-  }
-
-  public edit(todo: ITodo) {
-    this.setState({ editing: true, editText: this.props.todo.title });
-  }
-
-  public toggle(todo : ITodo) {
-    this.props.toggleTodo(todo);
-  }
-
-  public destroy(todo: ITodo) {
-    this.props.deleteTodo(todo);
-  }
-
-  public save(todo: ITodo, title: string) {
-    this.props.updateTodo({ ...todo, title });
-    this.setState({ editing: false, editText: title });
-  }
-
-  public handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
-    if (event.keyCode === ESCAPE_KEY) {
-      this.cancel();
-    } else if (event.keyCode === ENTER_KEY) {
-      this.save(this.props.todo, this.state.editText);
-    }
-  };
-
-  public handleChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const input = event.target;
-    this.setState({ editText: input.value });
-  };
-
-  public handleSubmit = (event: FormEvent<HTMLInputElement>) => {
-    const val = this.state.editText.trim();
-    if (val) {
-      this.save(this.props.todo, this.state.editText);
-    } else {
-      this.destroy(this.props.todo);
-    }
-  };
-
   /**
    * This is a completely optional performance enhancement that you can
    * implement on any React component. If you were to delete this method
@@ -96,29 +53,70 @@ class TodoItemComonent extends React.Component<TodoItemComonentProps, ITodoItemS
     }
   }
 
+  public cancelEdit = () => {
+    this.setState({ editing: false, editText: this.props.todo.title });
+  };
+
+  public editTodo = () => {
+    this.setState({ editing: true, editText: this.props.todo.title });
+  };
+
+  public toggleTodo = () => {
+    this.props.toggleTodo(this.props.todo);
+  };
+
+  public destroyTodo = () => {
+    this.props.deleteTodo(this.props.todo);
+  };
+
+  public saveTodo = () => {
+    const { editText: title } = this.state;
+
+    this.props.updateTodo({ ...this.props.todo, title });
+    this.setState({ editing: false, editText: title });
+  };
+
+  public handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
+    if (event.keyCode === ESCAPE_KEY) {
+      this.cancelEdit();
+    } else if (event.keyCode === ENTER_KEY) {
+      this.saveTodo();
+    }
+  };
+
+  public handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+    this.setState({ editText: event.target.value });
+  };
+
+  public handleSubmit = (event: FormEvent<HTMLInputElement>) => {
+    const val = this.state.editText.trim();
+
+    return val ? this.saveTodo() : this.destroyTodo();
+  };
+
   public render() {
+    const { todo } = this.props;
+    const { editing } = this.state;
+
     return (
-      <li className={classNames({
-        completed: this.props.todo.completed,
-        editing: this.state.editing
-      })}>
+      <li className={classNames({ completed: todo.completed, editing: editing })}>
         <div className="view">
           <input
             className="toggle"
             type="checkbox"
-            checked={this.props.todo.completed}
-            onChange={() => this.toggle(this.props.todo)}
+            checked={todo.completed}
+            onChange={this.toggleTodo}
           />
-          <label onDoubleClick={() => this.edit(this.props.todo)}>
+          <label onDoubleClick={this.editTodo}>
             {this.props.todo.title}
           </label>
-          <button className="destroy" onClick={() => this.destroy(this.props.todo)} />
+          <button className="destroy" onClick={this.destroyTodo} />
         </div>
         <input
           ref="editField"
           className="edit"
           value={this.state.editText}
-          onBlur={ e => this.handleSubmit(e) }
+          onBlur={this.handleSubmit}
           onChange={this.handleChange}
           onKeyDown={this.handleKeyDown}
         />

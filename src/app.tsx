@@ -1,139 +1,118 @@
 /// <reference path="./interfaces.d.ts"/>
 
 import * as React from 'react';
-import * as ReactDOM from 'react-dom';
 import * as Uuid from 'uuid';
 import { Route, Switch } from "react-router";
-import { KeyboardEvent, FormEvent } from 'react';
+import { ChangeEvent, FormEvent } from 'react';
 import { connect } from "react-redux";
 
 import { TodoFooter } from "@app/footer";
-import { TodoItem } from "@app/todoItem";
-import { ENTER_KEY } from "@app/constants";
-import { addTodo, clearCompleted, deleteTodo, toggleAll, toggleTodo, updateTodo } from "@app/actions";
+import { TodoList } from "@app/todoList";
+import { addTodo, deleteTodo, toggleAll, toggleTodo, updateTodo } from "@app/actions";
 
 interface ConnectedStateProps {
   todos: ITodo[];
+  activeTodos: ITodo[];
+  completedTodos: ITodo[];
 }
 
 interface ConnectedDispatchProps {
   addTodo: typeof addTodo;
   toggleAll: typeof toggleAll;
-  clearCompleted: typeof clearCompleted;
 }
 
-type TodoAppComponentProps = IAppProps & ConnectedStateProps & ConnectedDispatchProps;
+interface State {
+  newTodoTitle: string;
+}
 
-class TodoAppComponent extends React.Component<TodoAppComponentProps, IAppState> {
-  public handleNewTodoKeyDown(event : KeyboardEvent<HTMLInputElement>) {
-    if (event.keyCode !== ENTER_KEY) {
-      return;
-    }
+type TodoAppComponentProps = ConnectedStateProps & ConnectedDispatchProps;
 
-    event.preventDefault();
+class TodoAppComponent extends React.Component<TodoAppComponentProps, State> {
+  public state = {
+    newTodoTitle: ''
+  };
 
-    const val = (ReactDOM.findDOMNode(this.refs["newField"]) as HTMLInputElement).value.trim();
+  public onNewTodoChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const title = event.target.value;
 
-    if (val) {
-      const todo = { id: Uuid.v4(), title: val, completed: false };
+    this.setState({ newTodoTitle: title })
+  };
+
+  public onNewTodoSubmit = (event: FormEvent<HTMLFormElement>) => {
+    const title = this.state.newTodoTitle;
+    const todo = { id: Uuid.v4(), title: title, completed: false };
+
+    if (todo.title) {
       this.props.addTodo(todo);
-      (ReactDOM.findDOMNode(this.refs["newField"]) as HTMLInputElement).value = '';
+      this.setState({ newTodoTitle: '' });
     }
-  }
+  };
 
-  public toggleAll(event : FormEvent<HTMLInputElement>) {
-    const target: any = event.target;
+  public toggleAll = (event : ChangeEvent<HTMLInputElement>) => {
+    const target = event.target;
     const checked = target.checked;
+
     this.props.toggleAll(checked);
-  }
-
-  public clearCompleted() {
-    this.props.clearCompleted();
-  }
-
-  private renderTodos(todos: ITodo[]) {
-    return todos.map((todo) => (
-      <TodoItem
-        key={todo.id}
-        todo={todo}
-      />
-    ));
-  }
+  };
 
   public render() {
-    const { todos } = this.props;
-    let footer, main;
-
-    // Note: It's usually better to use immutable data structures since they're
-    // easier to reason about and React works very well with them. That's why
-    // we use map(), filter() and reduce() everywhere instead of mutating the
-    // array or todo items themselves.
-    const activeTodoCount = todos.reduce(function (accum, todo) {
-      return todo.completed ? accum : accum + 1;
-    }, 0);
-
-    const completedCount = todos.length - activeTodoCount;
-
-    if (activeTodoCount || completedCount) {
-      footer =
-        <TodoFooter
-          count={activeTodoCount}
-          completedCount={completedCount}
-          onClearCompleted={ e=> this.clearCompleted() }
-        />;
-    }
-
-    if (todos.length) {
-      main = (
-        <section className="main">
-          <input
-            id="toggle-all"
-            className="toggle-all"
-            type="checkbox"
-            onChange={ e => this.toggleAll(e) }
-            checked={activeTodoCount === 0}
-          />
-          <label htmlFor="toggle-all">
-            Mark all as complete
-          </label>
-          <ul className="todo-list">
-            <Switch>
-              <Route exact path="/" render={() => this.renderTodos(todos)} />
-              <Route path="/active" render={() => this.renderTodos(todos.filter(todo => !todo.completed))} />
-              <Route path="/completed" render={() => this.renderTodos(todos.filter(todo => todo.completed))} />
-            </Switch>
-          </ul>
-        </section>
-      );
-    }
+    const { todos, activeTodos, completedTodos } = this.props;
+    const { newTodoTitle } = this.state;
 
     return (
       <div>
         <header className="header">
           <h1>todos</h1>
-          <input
-            ref="newField"
-            className="new-todo"
-            placeholder="What needs to be done?"
-            onKeyDown={ e => this.handleNewTodoKeyDown(e) }
-            autoFocus={true}
-          />
+          <form onSubmit={this.onNewTodoSubmit}>
+            <input
+              ref="newField"
+              className="new-todo"
+              placeholder="What needs to be done?"
+              onChange={this.onNewTodoChange}
+              value={newTodoTitle}
+              autoFocus={true}
+            />
+          </form>
         </header>
-        {main}
-        {footer}
+        {todos.length &&
+          <section className="main">
+            <input
+              id="toggle-all"
+              className="toggle-all"
+              type="checkbox"
+              onChange={this.toggleAll}
+              checked={activeTodos.length === 0}
+            />
+            <label htmlFor="toggle-all">
+              Mark all as complete
+            </label>
+            <ul className="todo-list">
+              <Switch>
+                <Route exact path="/" render={() => <TodoList todos={todos} />} />
+                <Route path="/active" render={() => <TodoList todos={activeTodos} />} />
+                <Route path="/completed" render={() => <TodoList todos={completedTodos} />} />
+              </Switch>
+            </ul>
+          </section>
+        }
+        {todos.length && <TodoFooter />}
       </div>
     );
   }
 }
 
-const mapStateToProps = ({ todos }) => ({ todos });
+const mapStateToProps = ({ todos }) => ({
+  todos: todos,
+  activeTodos: todos.filter(todo => !todo.completed),
+  completedTodos: todos.filter(todo => todo.completed),
+});
+
 const mapDispatchToProps = {
   addTodo,
   updateTodo,
   deleteTodo,
   toggleTodo,
   toggleAll,
-  clearCompleted,
 };
 
 export const TodoApp = connect(mapStateToProps, mapDispatchToProps)(TodoAppComponent);

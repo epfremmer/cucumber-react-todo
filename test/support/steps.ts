@@ -2,7 +2,8 @@ import * as assert from 'assert';
 import { Given, Then, When } from 'cucumber';
 
 Given('I create a todo with text {string}', function(text) {
-  this.select('input.new-todo').value = text;
+  this.select('input.new-todo');
+  this.inputText(text);
   this.pressEnter();
 });
 
@@ -22,7 +23,7 @@ When('I fill out the {string} field with {string}', function(selector, value = '
   this.select(selector);
   assert(this.currentElement instanceof this.window.HTMLInputElement);
 
-  this.currentElement.value = value;
+  this.inputText(value);
 });
 
 When('I press enter', function() {

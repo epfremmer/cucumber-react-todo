@@ -39,10 +39,17 @@ class AppWorld {
     return this.currentElement = this.find(selector);
   }
 
+  public inputText(text) {
+    (this.currentElement as HTMLInputElement).value = text;
+
+    TestUtils.Simulate.change(this.currentElement, { target: this.currentElement });
+  }
+
   public pressEnter() {
     const event = { keyCode: 13 };
 
     TestUtils.Simulate.keyDown(this.currentElement, event);
+    TestUtils.Simulate.submit(this.currentElement.closest('form'));
   }
 
   public toggleCheckbox() {
