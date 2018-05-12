@@ -2,17 +2,17 @@
 
 import * as React from 'react';
 import * as classNames from 'classnames';
+import * as pluralize from 'pluralize';
 import { Link } from "react-router-dom";
 
 import { ALL_TODOS, ACTIVE_TODOS, COMPLETED_TODOS } from "./constants";
-import { Utils } from "./utils";
 
 class TodoFooter extends React.Component<ITodoFooterProps, {}> {
 
   public render() {
     // @todo: change this out with redux location data
     const nowShowing = window.location.hash.replace('#/', '');
-    const activeTodoWord = Utils.pluralize(this.props.count, 'item');
+    const activeTodoWord = pluralize('item', this.props.count);
     let clearButton = null;
 
     if (this.props.completedCount > 0) {

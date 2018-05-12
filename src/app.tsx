@@ -2,6 +2,7 @@
 
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
+import * as Uuid from 'uuid';
 import { Route, Switch } from "react-router";
 import { KeyboardEvent, FormEvent } from 'react';
 import { connect } from "react-redux";
@@ -10,7 +11,6 @@ import { TodoFooter } from "@app/footer";
 import { TodoItem } from "@app/todoItem";
 import { ENTER_KEY } from "@app/constants";
 import { addTodo, clearCompleted, deleteTodo, toggleAll, toggleTodo, updateTodo } from "@app/actions";
-import { Utils } from "@app/utils";
 
 interface ConnectedStateProps {
   todos: ITodo[];
@@ -35,7 +35,7 @@ class TodoAppComponent extends React.Component<TodoAppComponentProps, IAppState>
     const val = (ReactDOM.findDOMNode(this.refs["newField"]) as HTMLInputElement).value.trim();
 
     if (val) {
-      const todo = { id: Utils.uuid(), title: val, completed: false };
+      const todo = { id: Uuid.v4(), title: val, completed: false };
       this.props.addTodo(todo);
       (ReactDOM.findDOMNode(this.refs["newField"]) as HTMLInputElement).value = '';
     }
