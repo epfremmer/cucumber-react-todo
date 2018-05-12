@@ -4,7 +4,7 @@ import * as React from 'react';
 import { TodoItem } from "@app/todoItem";
 
 interface TodoListProps {
-  todos: ITodo[];
+  todos: Todo[];
 }
 
 export class TodoList extends React.Component<TodoListProps> {

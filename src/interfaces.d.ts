@@ -1,4 +1,4 @@
-interface ITodo {
+interface Todo {
   id: string,
   title: string,
   completed: boolean
@@ -6,7 +6,7 @@ interface ITodo {
 
 interface ITodoItemProps {
   key: string,
-  todo: ITodo;
+  todo: Todo;
 }
 
 interface ITodoItemState {

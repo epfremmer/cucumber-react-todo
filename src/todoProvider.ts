@@ -5,23 +5,23 @@ export default new class TodoProvider {
     return this.load()
   }
 
-  fetchTodos(): ITodo[] {
+  fetchTodos(): Todo[] {
     return this.todos;
   }
 
-  saveTodo(todo: ITodo) {
+  saveTodo(todo: Todo) {
     this.persist([...this.todos, todo]);
   }
 
-  updateTodo(todo: ITodo) {
+  updateTodo(todo: Todo) {
     this.persist(this.todos.map(item => item.id === todo.id ? todo : item));
   }
 
-  removeTodo(todo: ITodo) {
+  removeTodo(todo: Todo) {
     this.persist(this.todos.filter(item => item.id !== todo.id));
   }
 
-  toggleTodo(todo: ITodo) {
+  toggleTodo(todo: Todo) {
     this.updateTodo({...todo, completed: !todo.completed});
   }
 
@@ -39,7 +39,7 @@ export default new class TodoProvider {
     return data ? JSON.parse(data) : [];
   }
 
-  private persist(todos: ITodo[] = []) {
+  private persist(todos: Todo[] = []) {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(todos));
   }
 }

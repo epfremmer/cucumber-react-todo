@@ -2,7 +2,7 @@ import { AnyAction, combineReducers } from 'redux';
 import * as Actions from "@app/actions";
 import todoProvider from '@app/todoProvider';
 
-const todos = (state: ITodo[] = [], action: AnyAction) => {
+const todos = (state: Todo[] = [], action: AnyAction) => {
   switch (action.type) {
     case Actions.ADD_TODO:
       todoProvider.saveTodo(action.todo);

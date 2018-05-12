@@ -11,9 +11,9 @@ import { TodoList } from "@app/todoList";
 import { addTodo, deleteTodo, toggleAll, toggleTodo, updateTodo } from "@app/actions";
 
 interface ConnectedStateProps {
-  todos: ITodo[];
-  activeTodos: ITodo[];
-  completedTodos: ITodo[];
+  todos: Todo[];
+  activeTodos: Todo[];
+  completedTodos: Todo[];
 }
 
 interface ConnectedDispatchProps {
