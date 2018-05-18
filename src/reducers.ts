@@ -1,8 +1,8 @@
-import { AnyAction, combineReducers } from 'redux';
+import { AnyAction } from 'redux';
 import * as Actions from "@app/actions";
 import todoProvider from '@app/todoProvider';
 
-const todos = (state: Todo[] = [], action: AnyAction) => {
+export const todos = (state: Todo[] = todoProvider.fetchTodos(), action: AnyAction) => {
   switch (action.type) {
     case Actions.ADD_TODO:
       todoProvider.saveTodo(action.todo);
@@ -26,5 +26,3 @@ const todos = (state: Todo[] = [], action: AnyAction) => {
       return state;
   }
 };
-
-export const reducers = combineReducers({ todos });
