@@ -1,5 +1,5 @@
-interface Todo {
-  id: string,
-  title: string,
-  completed: boolean
+declare interface Todo {
+  id: string;
+  title: string;
+  completed: boolean;
 }

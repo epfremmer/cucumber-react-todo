@@ -6,8 +6,16 @@
   "jsRules": {},
   "rules": {
     "quotemark": [true, "single", "jsx-double"],
-    "ordered-imports": [true, { "import-sources-order": "any" }],
+    "ordered-imports": false,
+    "object-literal-sort-keys": false,
     "arrow-parens": [true, "ban-single-arg-parens"],
+    "interface-name": [true, "never-prefix"],
+    "no-empty-interface": false,
+    "member-access": false,
+    "no-string-literal": false,
+    "new-parens": false,
+    "trailing-comma": [true, {"multiline": "ignore", "singleline": "never"}],
+    "semicolon": [true, "ignore-bound-class-methods"],
     "member-ordering": [true, { "order": [
       "static-field",
       "instance-field",

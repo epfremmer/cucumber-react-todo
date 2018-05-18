@@ -1,5 +1,3 @@
-/// <reference path="./interfaces.d.ts"/>
-
 import * as React from 'react';
 import * as Uuid from 'uuid';
 import { Route, Switch } from 'react-router';
@@ -35,12 +33,12 @@ class TodoAppComponent extends React.Component<TodoAppComponentProps, TodoAppSta
   public onNewTodoChange = (event: ChangeEvent<HTMLInputElement>) => {
     const title = event.target.value;
 
-    this.setState({ newTodoTitle: title })
+    this.setState({ newTodoTitle: title });
   };
 
   public onNewTodoSubmit = (event: FormEvent<HTMLFormElement>) => {
     const title = this.state.newTodoTitle;
-    const todo = { id: Uuid.v4(), title: title, completed: false };
+    const todo = { id: Uuid.v4(), title, completed: false };
 
     if (todo.title) {
       this.props.addTodo(todo);
@@ -48,7 +46,7 @@ class TodoAppComponent extends React.Component<TodoAppComponentProps, TodoAppSta
     }
   };
 
-  public toggleAll = (event : ChangeEvent<HTMLInputElement>) => {
+  public toggleAll = (event: ChangeEvent<HTMLInputElement>) => {
     const target = event.target;
     const checked = target.checked;
 
@@ -102,7 +100,7 @@ class TodoAppComponent extends React.Component<TodoAppComponentProps, TodoAppSta
 }
 
 const mapStateToProps = ({ todos }) => ({
-  todos: todos,
+  todos,
   activeTodos: todos.filter(todo => !todo.completed),
   completedTodos: todos.filter(todo => todo.completed),
 });

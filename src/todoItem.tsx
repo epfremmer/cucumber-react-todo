@@ -1,5 +1,3 @@
-/// <reference path="./interfaces.d.ts"/>
-
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import * as classNames from 'classnames';
@@ -10,12 +8,12 @@ import { ENTER_KEY, ESCAPE_KEY } from '@app/constants';
 import { deleteTodo, toggleTodo, updateTodo } from '@app/actions';
 
 interface TodoItemProps {
-  key: string,
+  key: string;
   todo: Todo;
 }
 
 interface TodoItemState {
-  editText: string
+  editText: string;
   editing: boolean;
 }
 
@@ -57,7 +55,7 @@ class TodoItemComonent extends React.Component<TodoItemComonentProps, TodoItemSt
    */
   public componentDidUpdate(prevProps: TodoItemComonentProps, prevState: TodoItemState) {
     if (!prevState.editing && this.state.editing) {
-      const node = ReactDOM.findDOMNode(this.refs["editField"]) as HTMLInputElement;
+      const node = ReactDOM.findDOMNode(this.refs['editField']) as HTMLInputElement;
       node.focus();
       node.setSelectionRange(node.value.length, node.value.length);
     }
@@ -109,7 +107,7 @@ class TodoItemComonent extends React.Component<TodoItemComonentProps, TodoItemSt
     const { editing } = this.state;
 
     return (
-      <li className={classNames({ completed: todo.completed, editing: editing })}>
+      <li className={classNames({ completed: todo.completed, editing })}>
         <div className="view">
           <input
             className="toggle"

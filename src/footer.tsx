@@ -1,5 +1,3 @@
-/// <reference path="./interfaces.d.ts"/>
-
 import * as React from 'react';
 import * as classNames from 'classnames';
 import * as pluralize from 'pluralize';

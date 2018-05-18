@@ -2,7 +2,7 @@ const STORAGE_KEY = 'react-todos';
 
 export default new class TodoProvider {
   get todos() {
-    return this.load()
+    return this.load();
   }
 
   fetchTodos(): Todo[] {
@@ -42,4 +42,4 @@ export default new class TodoProvider {
   private persist(todos: Todo[] = []) {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(todos));
   }
-}
+};

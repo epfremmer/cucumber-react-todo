@@ -1,5 +1,3 @@
-/// <reference path="./interfaces.d.ts"/>
-
 import * as React from 'react';
 import { TodoItem } from '@app/todoItem';
 
@@ -13,7 +11,7 @@ export class TodoList extends React.Component<TodoListProps> {
 
     return (
       <React.Fragment>
-        {todos.map((todo) => (
+        {todos.map(todo => (
           <TodoItem key={todo.id} todo={todo} />
         ))}
       </React.Fragment>

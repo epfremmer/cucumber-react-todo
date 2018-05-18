@@ -1,5 +1,5 @@
-import { createStore, combineReducers, applyMiddleware } from 'redux'
-import { routerMiddleware, routerReducer } from 'react-router-redux'
+import { createStore, combineReducers, applyMiddleware } from 'redux';
+import { routerMiddleware, routerReducer } from 'react-router-redux';
 import createHashHistory from 'history/createHashHistory';
 import * as reducers from '@app/reducers';
 
