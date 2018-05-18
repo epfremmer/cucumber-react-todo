@@ -2,13 +2,13 @@
 
 import * as React from 'react';
 import * as Uuid from 'uuid';
-import { Route, Switch } from "react-router";
+import { Route, Switch } from 'react-router';
 import { ChangeEvent, FormEvent } from 'react';
-import { connect } from "react-redux";
+import { connect } from 'react-redux';
 
-import { TodoFooter } from "@app/footer";
-import { TodoList } from "@app/todoList";
-import { addTodo, deleteTodo, toggleAll, toggleTodo, updateTodo } from "@app/actions";
+import { TodoFooter } from '@app/footer';
+import { TodoList } from '@app/todoList';
+import { addTodo, deleteTodo, toggleAll, toggleTodo, updateTodo } from '@app/actions';
 
 interface TodoAppState {
   newTodoTitle: string;

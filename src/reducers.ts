@@ -1,5 +1,5 @@
 import { AnyAction } from 'redux';
-import * as Actions from "@app/actions";
+import * as Actions from '@app/actions';
 import todoProvider from '@app/todoProvider';
 
 export const todos = (state: Todo[] = todoProvider.fetchTodos(), action: AnyAction) => {

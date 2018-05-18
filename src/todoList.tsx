@@ -1,7 +1,7 @@
 /// <reference path="./interfaces.d.ts"/>
 
 import * as React from 'react';
-import { TodoItem } from "@app/todoItem";
+import { TodoItem } from '@app/todoItem';
 
 interface TodoListProps {
   todos: Todo[];

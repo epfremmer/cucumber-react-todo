@@ -3,11 +3,11 @@
 import * as React from 'react';
 import * as classNames from 'classnames';
 import * as pluralize from 'pluralize';
-import { Link } from "react-router-dom";
-import { RouterState } from "react-router-redux";
-import { connect } from "react-redux";
+import { Link } from 'react-router-dom';
+import { RouterState } from 'react-router-redux';
+import { connect } from 'react-redux';
 
-import { clearCompleted } from "@app/actions";
+import { clearCompleted } from '@app/actions';
 
 interface ConnectedStateProps {
   activeCount: number;

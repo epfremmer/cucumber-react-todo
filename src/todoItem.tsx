@@ -3,11 +3,11 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import * as classNames from 'classnames';
-import { ChangeEvent, FormEvent, KeyboardEvent } from "react";
-import { connect } from "react-redux";
+import { ChangeEvent, FormEvent, KeyboardEvent } from 'react';
+import { connect } from 'react-redux';
 
-import { ENTER_KEY, ESCAPE_KEY } from "@app/constants";
-import { deleteTodo, toggleTodo, updateTodo } from "@app/actions";
+import { ENTER_KEY, ESCAPE_KEY } from '@app/constants';
+import { deleteTodo, toggleTodo, updateTodo } from '@app/actions';
 
 interface TodoItemProps {
   key: string,
