@@ -74,7 +74,7 @@ class TodoAppComponent extends React.Component<TodoAppComponentProps, TodoAppSta
             />
           </form>
         </header>
-        {todos.length &&
+        {Boolean(todos.length) &&
           <section className="main">
             <input
               id="toggle-all"
@@ -95,7 +95,7 @@ class TodoAppComponent extends React.Component<TodoAppComponentProps, TodoAppSta
             </ul>
           </section>
         }
-        {todos.length && <TodoFooter />}
+        {Boolean(todos.length) && <TodoFooter />}
       </div>
     );
   }
